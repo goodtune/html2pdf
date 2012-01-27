@@ -1,0 +1,12 @@
+syntax: glob
+
+bin
+include
+lib
+lib64
+.Python
+
+wsgi.pid
+
+*.log
+*.pyc
