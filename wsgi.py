@@ -10,7 +10,7 @@ def application(environ, start_response):
     html_file.write(environ['wsgi.input'].read())
     html_file.flush()
 
-    pdf_file = tempfile.NamedTemporaryFile('rb', suffix='.html')
+    pdf_file = tempfile.NamedTemporaryFile('rb', suffix='.pdf')
 
     command = ['prince', '--input=html', html_file.name, '-o', pdf_file.name]
 
