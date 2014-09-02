@@ -8,5 +8,8 @@ RUN pip install gunicorn==18.0
 ADD wsgi.py /opt/html2pdf/wsgi.py
 WORKDIR /opt/html2pdf
 
-EXPOSE 8000
-CMD gunicorn wsgi:application -b :8000
+ENV timeout 300
+ENV workers 1
+
+EXPOSE 9999
+CMD gunicorn wsgi:application -b :9999 -w ${workers} -t ${timeout}
