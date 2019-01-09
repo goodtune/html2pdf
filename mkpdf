@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ ${DEBUG:0} -gt 0 ]]; then
+	set -x
+fi
+
+# Template for the mktemp command.
+TMPPDF=XXXXXXXXXXXX.pdf
+F1=$(mktemp -t $TMPPDF)
+
+# Produce the PDF document - read HTML from standard input.
+prince --input=html - -o $F1 $@
+
+# Send the resulting document back out on stdout.
+cat $F1

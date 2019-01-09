@@ -32,3 +32,9 @@ Available options are listed below with their corresponding header.
 
 If you have suggestions for other options please create an issue or implement
 it and create a pull request.
+
+# Client
+
+A simple example client using `curl`:
+
+    curl -H "BASE_URL: http://example.com" http://html2pdf:9999/ --data-binary @in.html -o out.pdf
