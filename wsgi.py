@@ -5,25 +5,16 @@ import tempfile
 
 
 def application(environ, start_response):
-
-    html_file = tempfile.NamedTemporaryFile('w', suffix='.html')
-    html_file.write(environ['wsgi.input'].read())
-    html_file.flush()
-
-    pdf_file = tempfile.NamedTemporaryFile('rb', suffix='.pdf')
-
-    command = ['prince', '--input=html', html_file.name, '-o', pdf_file.name]
+    command = ['mkpdf']
 
     base_url = environ.get('HTTP_BASE_URL')
     if base_url:
-        command.insert(1, '--baseurl=%s' % base_url)
+        command.append('--baseurl=%s' % base_url)
 
-    p = subprocess.Popen(command, stderr=subprocess.PIPE)
-
-    if p.wait() == 0:
+    try:
+        pdf = subprocess.check_output(command, input=environ['wsgi.input'].read())
         start_response('200 OK', [('Content-Type', 'application/pdf')])
-        yield pdf_file.read()
-
-    else:
+        yield pdf
+    except subprocess.CalledProcessError as exc:
         start_response('400 Bad Request', [('Content-Type', 'text/plain')])
-        yield p.stderr.read()
+        yield exc.output
